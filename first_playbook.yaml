@@ -1,0 +1,66 @@
+---
+- name: test
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: update apt
+      apt: 
+        update_cache: yes
+
+    - name: install git
+      apt:
+        name: git
+        state: present
+
+    - name: copy script
+      copy:
+        src: /home/kumar/echo.sh
+        dest: /home/ubuntu/echo.sh
+
+    - name: Change ownership of echo.sh
+      file:
+        path: /home/ubuntu/echo.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: run a script
+      shell: bash /home/ubuntu/echo.sh
+
+    - name: create a directory
+      file: 
+        path: /home/ubuntu/devops
+        state: directory
+        mode: '0777'
+
+    - name: create a file
+      file:
+        path: /home/ubuntu/devops/file1.txt
+        state: touch
+
+    - name: add contents
+      shell: echo "this is my first playbook" > /home/ubuntu/file1.txt
+      
+
+    - name: command to list all hidden files
+      command: ls -a
+
+    - name: command to check the file permission
+      command: ls -l
+
+    - name: start and enable ssh services
+      service: 
+        name: ssh
+        state: started
+        enabled: yes
+
+    - name: adding user
+      user: 
+        name: charan
+        state: present
+        shell: /bin/bash
+        groups: sudo
+        create_home: yes
+
+  
